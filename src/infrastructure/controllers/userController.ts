@@ -1,10 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ZodError } from 'zod';
+
 import { CreateUserDto } from '../../application/user/dto/createUserDto';
 import { createUser } from '../../application/user/createUser';
 import { getUser } from '../../application/user/getUser';
 import { updateUser } from '../../application/user/updateUser';
 import { UpdateUserDto } from '../../application/user/dto/updateUserDto';
+import { deleteUser } from '../../application/user/deleteUser';
 
 const userController = {
   createUser: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -54,9 +56,18 @@ const userController = {
     }
   },
 
-  deleteUser: async (request: FastifyRequest, reply: FastifyReply) => {
-    await deleteUser(request.params.id);
-    reply.code(200).send();
+  deleteUser: async (
+    request: FastifyRequest<{
+      Params: { id: string };
+    }>,
+    reply: FastifyReply,
+  ) => {
+    try {
+      await deleteUser(request.params.id);
+      reply.code(204).send();
+    } catch (error) {
+      reply.code(500).send({ error: error.message });
+    }
   },
 };
 

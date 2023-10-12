@@ -14,6 +14,6 @@ export const updateUser = async (
     }
     return user.toObject();
   } catch (error) {
-    throw new Error(`Error updating user: ${error}`);
+    throw new Error(`Error updating user: ${error.message}`);
   }
 };
