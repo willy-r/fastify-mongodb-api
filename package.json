@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run index.js",
+    "start": "bun run ./src/index.js",
     "lint": "eslint"
   },
   "devDependencies": {
@@ -19,6 +19,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "fastify": "^4.24.0",
     "mongoose": "^7.6.1"
   }
 }
