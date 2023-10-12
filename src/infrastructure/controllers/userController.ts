@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { CreateUserDto } from '../../application/user/dto/createUserDto';
 import { createUser } from '../../application/user/createUser';
 import { ZodError } from 'zod';
+import { getUser } from '../../application/user/getUser';
 
 const userController = {
   createUser: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -9,18 +10,27 @@ const userController = {
       const createUserDto = CreateUserDto.parse(request.body);
       const user = await createUser(createUserDto);
       reply.code(201).send(user);
-    } catch (err) {
-      if (err instanceof ZodError) {
-        reply.code(400).send({ error: err });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        reply.code(400).send({ error });
         return;
       }
-      reply.code(500).send({ error: err });
+      reply.code(500).send({ error });
     }
   },
 
-  getUser: async (request: FastifyRequest, reply: FastifyReply) => {
-    const user = await getUser(request.params.id);
-    reply.code(200).send(user);
+  getUser: async (
+    request: FastifyRequest<{
+      Params: { id: string };
+    }>,
+    reply: FastifyReply,
+  ) => {
+    try {
+      const user = await getUser(request.params.id);
+      reply.code(201).send(user);
+    } catch (error) {
+      reply.code(500).send({ error: error });
+    }
   },
 
   updateUser: async (request: FastifyRequest, reply: FastifyReply) => {
