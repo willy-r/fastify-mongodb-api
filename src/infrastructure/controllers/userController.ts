@@ -1,8 +1,10 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { ZodError } from 'zod';
 import { CreateUserDto } from '../../application/user/dto/createUserDto';
 import { createUser } from '../../application/user/createUser';
-import { ZodError } from 'zod';
 import { getUser } from '../../application/user/getUser';
+import { updateUser } from '../../application/user/updateUser';
+import { UpdateUserDto } from '../../application/user/dto/updateUserDto';
 
 const userController = {
   createUser: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -29,13 +31,27 @@ const userController = {
       const user = await getUser(request.params.id);
       reply.code(201).send(user);
     } catch (error) {
-      reply.code(500).send({ error: error });
+      reply.code(500).send({ error });
     }
   },
 
-  updateUser: async (request: FastifyRequest, reply: FastifyReply) => {
-    const user = await updateUser(request.params.id, request.body);
-    reply.code(200).send(user);
+  updateUser: async (
+    request: FastifyRequest<{
+      Params: { id: string };
+    }>,
+    reply: FastifyReply,
+  ) => {
+    try {
+      const updateUserDto = UpdateUserDto.parse(request.body);
+      const user = await updateUser(request.params.id, updateUserDto);
+      reply.code(200).send(user);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        reply.code(400).send({ error });
+        return;
+      }
+      reply.code(500).send({ error });
+    }
   },
 
   deleteUser: async (request: FastifyRequest, reply: FastifyReply) => {
