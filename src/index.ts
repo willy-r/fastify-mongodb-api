@@ -9,16 +9,12 @@ mongoose
   .connect(mongoUri)
   .then(() => {
     app.register(userRoutes);
-    app.listen(
-      { port: Bun.env.APP_PORT, host: Bun.env.APP_HOST },
-      (err, address) => {
-        if (err) {
-          app.log.error(err);
-          process.exit(1);
-        }
-        app.log.info(`Server is listening at ${address}`);
-      },
-    );
+    app.listen({ port: Bun.env.APP_PORT, host: Bun.env.APP_HOST }, (err) => {
+      if (err) {
+        app.log.error(err);
+        process.exit(1);
+      }
+    });
   })
   .catch((err) => {
     app.log.error(`Error connecting on MongoDB: ${err}`);
