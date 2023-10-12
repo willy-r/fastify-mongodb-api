@@ -8,6 +8,6 @@ export const getUser = async (userId: string) => {
     }
     return user.toObject();
   } catch (error) {
-    throw new Error(`Error getting user: ${error}`);
+    throw new Error(`Error getting user: ${error.message}`);
   }
 };

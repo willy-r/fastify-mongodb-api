@@ -19,7 +19,7 @@ const userController = {
         reply.code(400).send({ error });
         return;
       }
-      reply.code(500).send({ error });
+      reply.code(500).send({ error: error.message });
     }
   },
 
@@ -33,7 +33,7 @@ const userController = {
       const user = await getUser(request.params.id);
       reply.code(201).send(user);
     } catch (error) {
-      reply.code(500).send({ error });
+      reply.code(500).send({ error: error.message });
     }
   },
 
@@ -52,7 +52,7 @@ const userController = {
         reply.code(400).send({ error });
         return;
       }
-      reply.code(500).send({ error });
+      reply.code(500).send({ error: error.message });
     }
   },
 

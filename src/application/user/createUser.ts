@@ -7,6 +7,6 @@ export const createUser = async (createUserDto: CreateUserDtoType) => {
     await user.save();
     return user.toObject();
   } catch (error) {
-    throw new Error(`Error creating user: ${error}`);
+    throw new Error(`Error creating user: ${error.message}`);
   }
 };
