@@ -1,6 +1,19 @@
 version: '3.9'
 
 services:
+  fastify-api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URL=mongodb://root:example@mongodb:27017
+      - APP_PORT=3000
+      - APP_HOST=0.0.0.0
+    networks:
+      - db-network
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:7.0.2
     ports:
@@ -8,3 +21,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - db-network
+
+networks:
+  db-network:
